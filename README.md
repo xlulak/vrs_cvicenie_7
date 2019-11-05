@@ -1,3 +1,7 @@
+# Náplň cvičenia
+- zoznámenie sa s perifériou DMA
+- prenos dát s USART a DMA
+
 # USART a DMA
 
 - v ukážkovom programe sa na komunikáciu využíva periféria USART spolu s DMA (Direct Memory Access)
@@ -14,4 +18,9 @@
 - funkcia musí byť vyvolávaná periodicky a dostatočne rýchlo, aby sa predišlo strate dát
 
 ### Interrupts
-- 
+- namiesto neustáleho vyvolávania funkcie na spracovanie prijatých dát sú využité 3 zdroje prerušenia - 2x od DMA, 1x od USART
+- takto je funkcia na spracovanie dát vyvolaná len vtedy, ak je to potrebné
+- prerušenia od DMA - HT(half transfer) a TC(transfer complete)
+- prerušenie od USART - IDLE - ak sa zastaví komunikácia po zbernici, po uplinutí času potrebného na prenos jedného znaku sa vyvolá prerušenie
+
+### Konfigurácia DMA
