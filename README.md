@@ -33,6 +33,7 @@
     <img src="https://github.com/VRS-Predmet/vrs_cvicenie_7/blob/master/images/dma_config1.PNG" width="650">
 </p>
 
+- konfigurácia USART2 sa nelíši od konfigurácie z predchádzajúceho cvičenia
 - V NVIC je potrebné povoliť prerušenia pre DMA(všetky používané kanály) aj USART
 
 - v ukážkovom kóde je navyše ku vygenerovanému kódu ešte doplňené povolenie konkrétnych prerušení pre DMA a USART (IDLE, HT, TC), priradenie pamäťového miesta pre príjem dát a samotné zapnutie DMA pre obsluhu USART2 Rx a Tx 
