@@ -24,7 +24,7 @@
 uint8_t bufferUSART2dma[DMA_USART2_BUFFER_SIZE];
 
 /* Declaration and initialization of callback function */
-static void (* USART2_ProcessData)(const uint8_t* data, uint16_t len) = 0;
+static void (* USART2_ProcessData)(uint8_t data) = 0;
 
 /* Register callback */
 void USART2_RegisterCallback(void *callback)
@@ -63,9 +63,10 @@ void MX_USART2_UART_Init(void)
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*
-   *  USART2 DMA configuration. Write configuration for DMA used by USART for data Rx/Tx with INTERRUPTS.
+   * USART2 DMA configuration. Write configuration for DMA used by USART2 for data Rx/Tx with INTERRUPTS.
    * Rx memory buffer will be handled in normal mode, not circular!
-   * For more information about DMA registers, refer to reference manual
+   * You can use configuration from example program and modify it.
+   * For more information about DMA registers, refer to reference manual.
    */
   
   /* USART2_RX Init */
@@ -93,7 +94,7 @@ void MX_USART2_UART_Init(void)
   LL_USART_ConfigAsyncMode(USART2);
   LL_USART_DisableIT_CTS(USART2);
 
-  /* Enable USART peripheral and interrupts*/
+  /* Enable USART2 peripheral and interrupts*/
 
   	  //type your code here:
 }
@@ -113,7 +114,7 @@ void USART2_PutBuffer(uint8_t *buffer, uint8_t length)
 
 
 /*
- *	Function processing data received via USART with DMA and stored in Rx buffer.
+ *	Function processing data received via USART2 with DMA and stored in bufferUSART2dma.
  *	Forwards data to callback function.
  *	Keeps track of pointer pointing to Rx memory buffer and resets the pointer if overflow is possible in next Rx.
  *	Refer to reference manual - "normal memory mode" and "increment memory mode".
@@ -124,8 +125,6 @@ void USART2_CheckDmaReception(void)
 }
 
 
-/* USER CODE BEGIN 1 */
 
-/* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

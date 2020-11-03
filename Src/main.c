@@ -31,10 +31,9 @@ void SystemClock_Config(void);
 /* Function processing DMA Rx data. Counts how many capital and small letters are in sentence.
  * Result is supposed to be stored in global variable of type "letter_count_" that is defined in "main.h"
  *
- * @param1 - pointer to memory to be processed
- * @param2 - amount of data to be processed
- * */
-void proccesDmaData(const uint8_t* data, uint16_t len);
+ * @param1 - received sign
+ */
+void proccesDmaData(uint8_t sign);
 
 
 /* Space for your global variables. */
@@ -65,6 +64,7 @@ int main(void)
   while (1)
   {
 	  /* Periodic transmission of information about DMA Rx buffer state.
+	   * Transmission frequency - 5Hz.
 	   * Message format - "Buffer capacity: %d bytes, occupied memory: %d bytes, load [in %]: %f%"
 	   * Example message (what I wish to see in terminal) - Buffer capacity: 1000 bytes, occupied memory: 231 bytes, load [in %]: 23.1%
 	   */
@@ -74,10 +74,7 @@ int main(void)
   /* USER CODE END 3 */
 }
 
-/**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+
 void SystemClock_Config(void)
 {
   LL_FLASH_SetLatency(LL_FLASH_LATENCY_0);
@@ -112,42 +109,26 @@ void SystemClock_Config(void)
 /*
  * Implementation of function processing data received via USART.
  */
-void proccesDmaData(const uint8_t* data, uint16_t len)
+void proccesDmaData(uint8_t sign)
 {
 	/* Process received data */
 
 		// type your algorithm here:
 }
 
-/* USER CODE END 4 */
 
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
 void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
 
-  /* USER CODE END Error_Handler_Debug */
 }
 
 #ifdef  USE_FULL_ASSERT
-/**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+
 void assert_failed(char *file, uint32_t line)
 { 
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
+
 }
-#endif /* USE_FULL_ASSERT */
+
+#endif
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
