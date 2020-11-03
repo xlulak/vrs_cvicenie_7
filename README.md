@@ -36,4 +36,11 @@
 - konfigurácia USART2 sa nelíši od konfigurácie z predchádzajúceho cvičenia
 - V NVIC je potrebné povoliť prerušenia pre DMA(všetky používané kanály) aj USART2
 
-- v ukážkovom kóde je navyše ku vygenerovanému kódu ešte doplňené povolenie konkrétnych prerušení pre DMA a USART (IDLE, HT, TC), priradenie pamäťového miesta pre príjem dát a samotné zapnutie DMA pre obsluhu USART2 Rx a Tx 
+- v ukážkovom kóde je navyše ku vygenerovanému kódu ešte doplňené povolenie konkrétnych prerušení pre DMA a USART (IDLE, HT, TC), priradenie pamäťového miesta pre príjem dát a samotné zapnutie DMA pre obsluhu USART2 Rx a Tx
+
+
+# Zadanie
+- Vytvorete program pre MCU, vďaka ktorému bude MCU komunikovať s PC prostredníctvom USART s využitím DMA.
+- Okrem spracovania prijatých dát bude program pravidelne posielať informácie o aktuálnom vyťažení pamäte, ktorú využíva DMA pre dáta prijaté cez USART.
+
+### Úlohy:
