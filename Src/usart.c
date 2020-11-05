@@ -24,7 +24,7 @@
 uint8_t bufferUSART2dma[DMA_USART2_BUFFER_SIZE];
 
 /* Declaration and initialization of callback function */
-static void (* USART2_ProcessData)(uint8_t *data) = 0;
+static void (* USART2_ProcessData)(uint8_t data) = 0;
 
 /* Register callback */
 void USART2_RegisterCallback(void *callback)
@@ -160,22 +160,26 @@ void USART2_CheckDmaReception(void)
 
 	//LL_DMA_GetDataLength -> vracia pocet vsetkych prijatych znakov historicky
 
+	static uint16_t old_pos = 0;
+
 		uint32_t num = LL_DMA_GetDataLength(DMA1, LL_DMA_CHANNEL_6) % DMA_USART2_BUFFER_SIZE;	// 0 - 255
 
+		uint16_t pos = strlen(bufferUSART2dma);
+
+		for (int i = old_pos; i <= pos; i++)
+		{
+		USART2_ProcessData(bufferUSART2dma[i]); // zavola funkciu v maine, pricom ukazuje na prvy znak novoprijaty
+		}
+
+		old_pos = pos;
+
 		uint16_t status = DMA_USART2_BUFFER_SIZE - num;
-		uint16_t pos;
-
 		if (status < 20)
-				{
-					memset(bufferUSART2dma, 0, strlen(bufferUSART2dma));	//vynuluje buff
-					pos = 0;
-				}
-		else
-				{
-					pos = strlen(bufferUSART2dma);
-				}
-
-		USART2_ProcessData(&bufferUSART2dma[pos]); // zavola funkciu v maine, pricom ukazuje na prvy znak novoprijaty
+			{
+			memset(bufferUSART2dma, 0, strlen(bufferUSART2dma));	//vynuluje buff
+			old_pos = 0;
+			pos = 0;
+			}
 }
 
 
