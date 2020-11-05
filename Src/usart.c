@@ -165,9 +165,9 @@ void USART2_CheckDmaReception(void)
 		//memset(bufferUSART2dma, 0, strlen(bufferUSART2dma));	//vynuluje buff
 
 
-		uint8_t num = LL_DMA_GetDataLength(DMA1, LL_DMA_CHANNEL_6) % DMA_USART2_BUFFER_SIZE;	// 0 - 255
+		uint8_t num = LL_DMA_GetDataLength(DMA1, LL_DMA_CHANNEL_6) % 256;	// 0 - 255
 
-		pos = strlen(bufferUSART2dma);
+		pos = DMA_USART2_BUFFER_SIZE-num;
 
 		for (int i = old_pos; i <= pos; i++)
 		{
@@ -178,11 +178,18 @@ void USART2_CheckDmaReception(void)
 
 		if (num < 20 && num != 0)
 			{
-			uint8_t bufferUSART2dma_[DMA_USART2_BUFFER_SIZE];
-			for (int i=0 ; i<DMA_USART2_BUFFER_SIZE; i++)
-			{
-				bufferUSART2dma[i] = bufferUSART2dma_[i];
-			}
+				memset(bufferUSART2dma, 0, strlen(bufferUSART2dma));											//vynuluje buff
+
+				LL_DMA_DisableChannel(DMA1, LL_DMA_CHANNEL_6);													//NAŠA SPÁSA
+				LL_DMA_ConfigAddresses(	DMA1, LL_DMA_CHANNEL_6,
+				  						 	LL_USART_DMA_GetRegAddr(USART2, LL_USART_DMA_REG_DATA_RECEIVE),
+				  							(uint32_t)bufferUSART2dma,
+				  							LL_DMA_GetDataTransferDirection(DMA1, LL_DMA_CHANNEL_6));
+
+				    LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_6, DMA_USART2_BUFFER_SIZE);
+				    LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_6);
+				    LL_USART_EnableDMAReq_RX(USART2);
+
 			old_pos = 0;
 			pos = 0;
 			}
@@ -192,9 +199,10 @@ int numOfOccupied()
 {
 return pos;
 }
+
 int sizeOfBuff()
 {
-	int c= 256;
+	int c=256;
 	return c;
 }
 
