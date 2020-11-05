@@ -67,8 +67,12 @@ int main(void)
   /* Space for your local variables, callback registration ...*/
 
   	  //type your code here:
+  	  	uint8_t tx1[] = "Buffer capacity: ";
+  		uint8_t tx2[] = " bytes, occupied memory: ";
+  		uint8_t tx3[] = " bytes, load [in %]: ";
+  		uint8_t tx4[] = "%\n";
 
-  while (1)
+  		while (1)
   {
 	  /* Periodic transmission of information about DMA Rx buffer state.
 	   * Transmission frequency - 5Hz.
@@ -79,11 +83,24 @@ int main(void)
   	  	  	  //type your code here:
 
 	  USART2_CheckDmaReception();
-	  int p1=sizeOfBuff();
-	  int p2=numOfOccupied();
-	  //uint8_t *tx_data = compose(p1,p2);
-	  uint8_t tx_data[]="Ahoj";
-	  USART2_PutBuffer(tx_data, sizeof(tx_data));
+
+		int occupied = numOfOccupied();
+		int capacity = sizeOfBuff();
+		int percentage = (occupied / capacity) * 100;
+		uint8_t final[100];
+		uint8_t pomoc1[10],pomoc2[10],pomoc3[10];
+		itoa(capacity,pomoc1,10);
+		strcpy(final,tx1);
+		strcat(final, pomoc1);
+		itoa(occupied,pomoc2,10);
+		strcat(final,tx2);
+		strcat(final, pomoc2);
+		strcat(final,tx3);
+		itoa(percentage,pomoc3,10);
+		strcat(final,pomoc3);
+		strcat(final,tx4);
+
+	  USART2_PutBuffer(final, sizeof(final));
 	  LL_mDelay(1000);
 
   }
