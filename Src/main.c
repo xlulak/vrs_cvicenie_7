@@ -57,6 +57,7 @@ int main(void)
   MX_DMA_Init();
   MX_USART2_UART_Init();
 
+  USART2_RegisterCallback(proccesDmaData(sign));
   /* Space for your local variables, callback registration ...*/
 
   	  //type your code here:
@@ -70,6 +71,8 @@ int main(void)
 	   */
 
   	  	  	  //type your code here:
+
+
   }
   /* USER CODE END 3 */
 }
@@ -114,6 +117,7 @@ void proccesDmaData(uint8_t sign)
 	/* Process received data */
 
 		// type your algorithm here:
+
 }
 
 
