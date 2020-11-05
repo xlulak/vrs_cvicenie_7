@@ -178,7 +178,11 @@ void USART2_CheckDmaReception(void)
 
 		if (num < 20 && num != 0)
 			{
-			bufferUSART2dma[0]=0;
+			uint8_t bufferUSART2dma_[DMA_USART2_BUFFER_SIZE];
+			for (int i=0 ; i<DMA_USART2_BUFFER_SIZE; i++)
+			{
+				bufferUSART2dma[i] = bufferUSART2dma_[i];
+			}
 			old_pos = 0;
 			pos = 0;
 			}
