@@ -42,7 +42,9 @@ int start=0;
 int poc_prijatych=0;
 int poc_malych=0;
 int poc_velkych=0;
+uint8_t tx_data[100];
 letter_count_ nazov;
+uint8_t* compose(uint8_t capacity, uint8_t occupied);
 
 int main(void)
 {
@@ -76,13 +78,33 @@ int main(void)
 
   	  	  	  //type your code here:
 	  USART2_CheckDmaReception();
-	  LL_mDelay(800);
-
+	  uint8_t *tx_data = compose(DMA_USART2_BUFFER_SIZE,numOfOccupied());
+	  USART2_PutBuffer(tx_data, sizeof(tx_data));
+	  LL_mDelay(1000);
 
   }
   /* USER CODE END 3 */
 }
 
+uint8_t* compose(uint8_t capacity, uint8_t occupied)
+{
+	uint8_t tx1[] = "Buffer capacity: ";
+	uint8_t tx2[] = " bytes, occupied memory: ";
+	uint8_t tx3[] = " bytes, load [in %]: ";
+	uint8_t tx4[] = "%\n";
+
+	uint8_t percentage = (occupied / capacity) * 100;
+	uint8_t final[100];
+	strcpy(final,tx1);
+	strcat(final, capacity);
+	strcat(final,tx2);
+	strcat(final, occupied);
+	strcat(final,tx3);
+	strcat(final, percentage);
+	strcat(final,tx4);
+
+	return final;
+}
 
 void SystemClock_Config(void)
 {

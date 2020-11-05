@@ -32,7 +32,7 @@
 
 /* USER CODE BEGIN Private defines */
 #define DMA_USART2_BUFFER_SIZE 256
-
+ uint8_t numOfOccupied();
 /* USER CODE END Private defines */
 
 void MX_USART2_UART_Init(void);
