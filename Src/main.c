@@ -35,11 +35,14 @@ void SystemClock_Config(void);
  */
 void proccesDmaData(uint8_t sign);
 
-
 /* Space for your global variables. */
 
 	// type your global variables here:
-
+int start=0;
+int poc_prijatych=0;
+int poc_malych=0;
+int poc_velkych=0;
+letter_count_ nazov;
 
 int main(void)
 {
@@ -57,7 +60,8 @@ int main(void)
   MX_DMA_Init();
   MX_USART2_UART_Init();
 
-  USART2_RegisterCallback(proccesDmaData(sign));
+  USART2_RegisterCallback(proccesDmaData);
+
   /* Space for your local variables, callback registration ...*/
 
   	  //type your code here:
@@ -71,6 +75,8 @@ int main(void)
 	   */
 
   	  	  	  //type your code here:
+	  USART2_CheckDmaReception();
+	  LL_mDelay(10);
 
 
   }
@@ -117,6 +123,39 @@ void proccesDmaData(uint8_t sign)
 	/* Process received data */
 
 		// type your algorithm here:
+
+
+		if (start==0 && sign=='#'){				// zaciatok
+					start=1;
+		}
+
+		if(start==1)
+		{
+			poc_prijatych++;
+
+			if(sign>='A' && sign<='Z'){
+				poc_velkych++;
+			}
+			if(sign>='a' && sign<='z'){
+				poc_malych++;
+			}
+		}
+
+		if (poc_prijatych==35 && start == 1){
+					start=0;
+					poc_malych=0;
+					poc_velkych=0;
+					poc_prijatych=0;
+		}
+
+		if (start==1 && sign=='$'){				// konec
+
+					start=0;
+
+					nazov.capital_letter+=poc_velkych;
+					nazov.small_letter+=poc_malych;
+
+				}
 
 }
 
