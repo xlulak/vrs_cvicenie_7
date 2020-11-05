@@ -44,7 +44,7 @@ int poc_malych=0;
 int poc_velkych=0;
 uint8_t tx_data[100];
 letter_count_ nazov;
-uint8_t* compose(uint8_t capacity, uint8_t occupied);
+uint8_t* compose(int capacity, int occupied);
 
 int main(void)
 {
@@ -77,8 +77,12 @@ int main(void)
 	   */
 
   	  	  	  //type your code here:
+
 	  USART2_CheckDmaReception();
-	  uint8_t *tx_data = compose(DMA_USART2_BUFFER_SIZE,numOfOccupied());
+	  int p1=sizeOfBuff();
+	  int p2=numOfOccupied();
+	  //uint8_t *tx_data = compose(p1,p2);
+	  uint8_t tx_data[]="Ahoj";
 	  USART2_PutBuffer(tx_data, sizeof(tx_data));
 	  LL_mDelay(1000);
 
@@ -86,7 +90,7 @@ int main(void)
   /* USER CODE END 3 */
 }
 
-uint8_t* compose(uint8_t capacity, uint8_t occupied)
+uint8_t* compose(int capacity, int occupied)
 {
 	uint8_t tx1[] = "Buffer capacity: ";
 	uint8_t tx2[] = " bytes, occupied memory: ";
@@ -95,12 +99,16 @@ uint8_t* compose(uint8_t capacity, uint8_t occupied)
 
 	uint8_t percentage = (occupied / capacity) * 100;
 	uint8_t final[100];
+	uint8_t pomoc1[10],pomoc2[10],pomoc3[10];
+	itoa(capacity,pomoc1,10);
 	strcpy(final,tx1);
-	strcat(final, capacity);
+	strcat(final, pomoc1);
+	itoa(occupied,pomoc2,10);
 	strcat(final,tx2);
-	strcat(final, occupied);
+	strcat(final, pomoc2);
 	strcat(final,tx3);
-	strcat(final, percentage);
+	itoa(percentage,pomoc3,10);
+	strcat(final,pomoc3);
 	strcat(final,tx4);
 
 	return final;

@@ -184,9 +184,14 @@ void USART2_CheckDmaReception(void)
 			}
 }
 
-uint8_t numOfOccupied()
+int numOfOccupied()
 {
 return pos;
+}
+int sizeOfBuff()
+{
+	int c= 256;
+	return c;
 }
 
 
