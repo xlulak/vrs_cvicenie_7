@@ -23,7 +23,10 @@
 #include "dma.h"
 #include "usart.h"
 #include "gpio.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <float.h>
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 
@@ -42,7 +45,7 @@ int start=0;
 int poc_prijatych=0;
 int poc_malych=0;
 int poc_velkych=0;
-uint8_t tx_data[100];
+//uint8_t tx_data[];
 letter_count_ nazov;
 uint8_t* compose(int capacity, int occupied);
 
@@ -70,7 +73,7 @@ int main(void)
   	  	uint8_t tx1[] = "Buffer capacity: ";
   		uint8_t tx2[] = " bytes, occupied memory: ";
   		uint8_t tx3[] = " bytes, load [in %]: ";
-  		uint8_t tx4[] = "%\n";
+  		uint8_t tx4[] = "  %\n \r";
 
   		while (1)
   {
@@ -86,9 +89,11 @@ int main(void)
 
 		int occupied = numOfOccupied();
 		int capacity = sizeOfBuff();
-		int percentage = (occupied / capacity) * 100;
+		float occupied1 = occupied;
+		float percentage = occupied1/capacity*100.0;
 		uint8_t final[100];
 		uint8_t pomoc1[10],pomoc2[10],pomoc3[10];
+		memset(final,0,sizeof(final));
 		itoa(capacity,pomoc1,10);
 		strcpy(final,tx1);
 		strcat(final, pomoc1);
@@ -96,11 +101,11 @@ int main(void)
 		strcat(final,tx2);
 		strcat(final, pomoc2);
 		strcat(final,tx3);
-		itoa(percentage,pomoc3,10);
+		gcvt(percentage, 4, pomoc3);
 		strcat(final,pomoc3);
 		strcat(final,tx4);
 
-	  USART2_PutBuffer(final, sizeof(final));
+	  USART2_PutBuffer(final, strlen(final));
 	  LL_mDelay(1000);
 
   }
