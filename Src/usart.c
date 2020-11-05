@@ -19,12 +19,12 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
-
+#include <string.h>
 /* Memory buffer used directly by DMA for USART Rx*/
 uint8_t bufferUSART2dma[DMA_USART2_BUFFER_SIZE];
 
 /* Declaration and initialization of callback function */
-static void (* USART2_ProcessData)(uint8_t data) = 0;
+static void (* USART2_ProcessData)(uint8_t *data) = 0;
 
 /* Register callback */
 void USART2_RegisterCallback(void *callback)
@@ -73,7 +73,7 @@ void MX_USART2_UART_Init(void)
 
     LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_CHANNEL_6, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
     LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_6, LL_DMA_PRIORITY_MEDIUM);
-    LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_6, LL_DMA_MODE_CIRCULAR);
+    LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_6, LL_DMA_MODE_NORMAL);
     LL_DMA_SetPeriphIncMode(DMA1, LL_DMA_CHANNEL_6, LL_DMA_PERIPH_NOINCREMENT);
     LL_DMA_SetMemoryIncMode(DMA1, LL_DMA_CHANNEL_6, LL_DMA_MEMORY_INCREMENT);
     LL_DMA_SetPeriphSize(DMA1, LL_DMA_CHANNEL_6, LL_DMA_PDATAALIGN_BYTE);
@@ -156,7 +156,26 @@ void USART2_PutBuffer(uint8_t *buffer, uint8_t length)
  */
 void USART2_CheckDmaReception(void)
 {
-	//type your implementation here
+	if(USART2_ProcessData == 0) return;
+
+	//LL_DMA_GetDataLength -> vracia pocet vsetkych prijatych znakov historicky
+
+		uint32_t num = LL_DMA_GetDataLength(DMA1, LL_DMA_CHANNEL_6) % DMA_USART2_BUFFER_SIZE;	// 0 - 255
+
+		uint16_t status = DMA_USART2_BUFFER_SIZE - num;
+		uint16_t pos;
+
+		if (status < 20)
+				{
+					memset(bufferUSART2dma, 0, strlen(bufferUSART2dma));	//vynuluje buff
+					pos = 0;
+				}
+		else
+				{
+					pos = strlen(bufferUSART2dma);
+				}
+
+		USART2_ProcessData(&bufferUSART2dma[pos]); // zavola funkciu v maine, pricom ukazuje na prvy znak novoprijaty
 }
 
 
