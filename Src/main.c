@@ -33,7 +33,7 @@ void SystemClock_Config(void);
  *
  * @param1 - received sign
  */
-void proccesDmaData(uint16_t sign);
+void proccesDmaData(uint8_t sign);
 
 /* Space for your global variables. */
 
@@ -76,7 +76,7 @@ int main(void)
 
   	  	  	  //type your code here:
 	  USART2_CheckDmaReception();
-	//  LL_mDelay(10);
+	  LL_mDelay(800);
 
 
   }
@@ -118,7 +118,7 @@ void SystemClock_Config(void)
 /*
  * Implementation of function processing data received via USART.
  */
-void proccesDmaData(uint16_t sign)
+void proccesDmaData(uint8_t sign)
 {
 	/* Process received data */
 
@@ -129,7 +129,7 @@ void proccesDmaData(uint16_t sign)
 					start=1;
 		}
 
-		if(start==1)
+		if(start==1 && sign!=0)
 		{
 			poc_prijatych++;
 
